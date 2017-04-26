@@ -13,24 +13,24 @@ import org.joda.time.DateTime;
  * @author danny_000
  */
 public class Release {
-    
-    String url;
-    String html_url;
-    String assets_url;
-    String upload_url;
-    String tarball_url;
-    String zipball_url;
-    int id;
-    String tag_name;
-    String target_commitish;
-    String name;
-    String body;
-    boolean draft;
-    boolean prerelease;
-    DateTime created_at;
-    DateTime published_at;
-    GithubUser author;
-    List<Asset> assets;
+
+    private String url;
+    private String html_url;
+    private String assets_url;
+    private String upload_url;
+    private String tarball_url;
+    private String zipball_url;
+    private int id;
+    private String tag_name;
+    private String target_commitish;
+    private String name;
+    private String body;
+    private boolean draft;
+    private boolean prerelease;
+    private DateTime created_at;
+    private DateTime published_at;
+    private GithubUser author;
+    private List<Asset> assets;
 
     public Release() {
     }
@@ -103,9 +103,4 @@ public class Release {
         return assets;
     }
 
-
-    
-    
-    
-    
 }

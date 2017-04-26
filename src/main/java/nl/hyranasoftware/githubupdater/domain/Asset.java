@@ -5,6 +5,7 @@
  */
 package nl.hyranasoftware.githubupdater.domain;
 
+import java.util.Objects;
 import org.joda.time.DateTime;
 
 /**
@@ -92,6 +93,44 @@ public class Asset {
     public GithubUser getUploader() {
         return uploader;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 79 * hash + Objects.hashCode(this.content_type);
+        hash = 79 * hash + (int) (this.download_count ^ (this.download_count >>> 32));
+        hash = 79 * hash + Objects.hashCode(this.created_at);
+        hash = 79 * hash + Objects.hashCode(this.updated_at);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Asset other = (Asset) obj;
+        if (this.id != other.id) {
+            return false;
+        }
+        if (!Objects.equals(this.name, other.name)) {
+            return false;
+        }
+        if (!Objects.equals(this.content_type, other.content_type)) {
+            return false;
+        }
+        return true;
+    }
+
+    
+    
+    
     
     
 }
