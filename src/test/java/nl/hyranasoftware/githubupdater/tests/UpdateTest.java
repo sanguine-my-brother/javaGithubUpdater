@@ -8,10 +8,11 @@ package nl.hyranasoftware.githubupdater.tests;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import nl.hyranasoftware.githubupdater.Update;
+import nl.hyranasoftware.githubupdater.GithubUtility;
 import nl.hyranasoftware.githubupdater.domain.Release;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -26,7 +27,7 @@ import org.junit.Test;
 public class UpdateTest {
 
     final String specificRelease = "v0.3.4alpha";
-    Update update = new Update("eternia16", "javaGMR", specificRelease);
+    GithubUtility update = new GithubUtility("eternia16", "javaGMR", specificRelease);
 
     @Test
     public void getLatestRelease() {
@@ -43,9 +44,29 @@ public class UpdateTest {
     }
 
     @Test
+    public void checkForUpdate() {
+        try {
+            Release release = update.getLatestRelease();
+            if (release.getTag_name().equals(specificRelease)) {
+                assertFalse(update.checkForUpdates());
+            } else {
+                assertTrue(update.checkForUpdates());
+            }
+        } catch (UnirestException ex) {
+            Logger.getLogger(UpdateTest.class.getName()).log(Level.SEVERE, null, ex);
+            fail("Got a UnirestException");
+        }
+    }
+
+    @Test
     public void getAllReleases() {
-        List<Release> releases = update.getAllReleases();
-        assertFalse(releases.isEmpty());
+        try {
+            List<Release> releases = update.getAllReleases();
+            assertFalse(releases.isEmpty());
+        } catch (Exception ex) {
+            Logger.getLogger(UpdateTest.class.getName()).log(Level.SEVERE, null, ex);
+            fail();
+        }
     }
 
     @Test
@@ -74,32 +95,51 @@ public class UpdateTest {
     }
 
     @Test
-    public void downloadSpecificRelease() {
-        File file = update.downloadSpecificRelease(specificRelease);
-        assertTrue(file.exists());
-        if (file.exists()) {
-            file.delete();
-        }
-    }
-
-    @Test
     public void downloadLatestToSpecificDirectory() {
-        String location = System.getProperty("user.home");
-        File file = update.downloadtoSpecificLocation(location);
+        File location = new File(System.getProperty("user.home"));
+                Release release = null;
+        try {
+            release = update.getLatestRelease();
+        } catch (UnirestException ex) {
+            Logger.getLogger(UpdateTest.class.getName()).log(Level.SEVERE, null, ex);
+            fail("Couldn't connect or failed to download release information");
+        }
+        File file = null;
+        try {
+            file = update.downloadAssetToSpecificLocation(location.toPath(), release.getAssets().get(1));
+        } catch (UnirestException ex) {
+            Logger.getLogger(UpdateTest.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(UpdateTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
         assertTrue(file.exists());
         if (file.exists()) {
             file.delete();
         }
     }
 
+
     @Test
-    public void downloadToSpecificDirectoryFromSpecificRelease() {
-        String location = System.getProperty("user.home");
-        File file = update.downloadtoSpecificLocationFromSpecificRelease(location);
-        assertTrue(file.exists());
-        if (file.exists()) {
-            file.delete();
+    public void overwriteCurrentApplication() {
+        File file = new File(GithubUtility.class.getProtectionDomain()
+                .getCodeSource()
+                .getLocation()
+                .getPath());
+                Release release = null;
+        try {
+            release = update.getLatestRelease();
+        } catch (UnirestException ex) {
+            Logger.getLogger(UpdateTest.class.getName()).log(Level.SEVERE, null, ex);
+            fail("Couldn't connect or failed to download release information");
         }
+        try {
+            assertTrue(update.updateCurrentJar(file, release.getAssets().get(1)));
+        } catch (UnirestException ex) {
+            Logger.getLogger(UpdateTest.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(UpdateTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
 
 }
