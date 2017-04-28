@@ -12,6 +12,11 @@ For example for this repo it will like this:
 ```java
 GithubUtility githubUtility = new GithubUtility("eternia16", "javaGithubUpdater", "v0.1alpha");
 ```
+You can get these parameters from the URL of your project:
+https://github.com/eternia16/javaGithubUpdater/
+
+The tag name can be retrieved from your projects releases page.
+
 
 After that you can you can use the lib is ready to go.
 
