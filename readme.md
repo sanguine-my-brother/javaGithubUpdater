@@ -6,7 +6,7 @@ To use this library you have to initialize the GithubUtility class.
 The constructor takes three parameters:
 * The name of the repo owner.
 * The name of the repo.
-* The tag name of the applcations current release.
+* The tag name of the applications current release.
 
 For example for this repo it will like this:
 ```java
