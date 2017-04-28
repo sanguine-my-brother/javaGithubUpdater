@@ -17,6 +17,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.net.URLConnection;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -39,7 +41,7 @@ public class GithubUtility {
     private String repoName;
     private String currentTagVersion;
     private String repoUrl;
-
+    
     /**
      * Initializes the updater
      *
@@ -67,6 +69,7 @@ public class GithubUtility {
      */
     public boolean checkForUpdates() throws UnirestException {
         Release release = getLatestRelease();
+        
         if (release.getTag_name().equals(currentTagVersion)) {
             return false;
         } else {
@@ -106,25 +109,22 @@ public class GithubUtility {
      * @throws IOException 
      */
     public File downloadAsset(Asset asset) throws UnirestException, IOException {
-        StringBuilder builder = new StringBuilder();
-        String requestUrl = repoUrl + "/latest";
-        String response = Unirest.get(requestUrl).asJson().getBody().toString();
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JodaModule());
-        Release release = null;
-        try {
-            release = mapper.readValue(response, Release.class);
-        } catch (IOException ex) {
-            Logger.getLogger(GithubUtility.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
-        }
-        BufferedInputStream stream = new BufferedInputStream(Unirest.get(asset.getBrowser_download_url()).asBinary().getBody());
+
+        URL url = new URL(asset.getBrowser_download_url());
+        HttpURLConnection httpConnection = (HttpURLConnection) (url.openConnection());
+        long completeFileSize = httpConnection.getContentLength();
+        httpConnection.setReadTimeout(15000);
+        
+        BufferedInputStream stream = new BufferedInputStream(httpConnection.getInputStream());
         byte[] buffer = new byte[8 * 1024];
         File file = new File(asset.getName());
         int bytesRead;
         BufferedOutputStream outStream = new BufferedOutputStream(new FileOutputStream(file));
+        double downLoadFileSize = 0;
         while ((bytesRead = stream.read(buffer)) != -1) {
+            downLoadFileSize = downLoadFileSize + bytesRead;
             outStream.write(buffer, 0, bytesRead);
+            sendDownloadProgress(((double) downLoadFileSize / (double) completeFileSize));
         }
         outStream.close();
         Logger.getLogger(GithubUtility.class.getName()).log(Level.INFO, file.getAbsolutePath());
@@ -168,6 +168,19 @@ public class GithubUtility {
         File newAsset = downloadAsset(asset);
         newAsset.renameTo(file);
         return true;
+    }
+    
+    /**
+     * This method must be overriden by your view.
+     * It receives the download progress
+     * @param percent 
+     */
+    public void sendDownloadProgress(double percent) {
+                Logger.getLogger(GithubUtility.class.getName()).log(Level.INFO, percent + "");
+        /*
+        THIS MUST BE OVERRIDDEN BY YOUR VIEW
+         */
+
     }
 
 }

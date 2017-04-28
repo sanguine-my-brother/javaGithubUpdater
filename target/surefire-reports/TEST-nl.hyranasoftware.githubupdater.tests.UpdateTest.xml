@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite tests="6" failures="0" name="nl.hyranasoftware.githubupdater.tests.UpdateTest" time="26.192" errors="0" skipped="0">
+<testsuite tests="6" failures="0" name="nl.hyranasoftware.githubupdater.tests.UpdateTest" time="127.705" errors="0" skipped="0">
   <properties>
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
     <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk1.8.0_111\jre\bin"/>
@@ -61,10 +61,10 @@
     <property name="sun.desktop" value="windows"/>
     <property name="sun.cpu.isalist" value="amd64"/>
   </properties>
-  <testcase classname="nl.hyranasoftware.githubupdater.tests.UpdateTest" name="downloadLatestToSpecificDirectory" time="9.075"/>
-  <testcase classname="nl.hyranasoftware.githubupdater.tests.UpdateTest" name="checkForUpdate" time="0.314"/>
-  <testcase classname="nl.hyranasoftware.githubupdater.tests.UpdateTest" name="getAllReleases" time="0.184"/>
-  <testcase classname="nl.hyranasoftware.githubupdater.tests.UpdateTest" name="overwriteCurrentApplication" time="7.961"/>
-  <testcase classname="nl.hyranasoftware.githubupdater.tests.UpdateTest" name="downloadLatestRelease" time="8.428"/>
-  <testcase classname="nl.hyranasoftware.githubupdater.tests.UpdateTest" name="getLatestRelease" time="0.151"/>
+  <testcase classname="nl.hyranasoftware.githubupdater.tests.UpdateTest" name="downloadLatestToSpecificDirectory" time="9.092"/>
+  <testcase classname="nl.hyranasoftware.githubupdater.tests.UpdateTest" name="checkForUpdate" time="0.323"/>
+  <testcase classname="nl.hyranasoftware.githubupdater.tests.UpdateTest" name="getAllReleases" time="0.197"/>
+  <testcase classname="nl.hyranasoftware.githubupdater.tests.UpdateTest" name="overwriteCurrentApplication" time="94.501"/>
+  <testcase classname="nl.hyranasoftware.githubupdater.tests.UpdateTest" name="downloadLatestRelease" time="23.091"/>
+  <testcase classname="nl.hyranasoftware.githubupdater.tests.UpdateTest" name="getLatestRelease" time="0.411"/>
 </testsuite>
