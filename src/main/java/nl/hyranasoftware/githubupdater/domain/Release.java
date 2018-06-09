@@ -5,6 +5,7 @@
  */
 package nl.hyranasoftware.githubupdater.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.List;
 import org.joda.time.DateTime;
 
@@ -12,6 +13,7 @@ import org.joda.time.DateTime;
  *
  * @author danny_000
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Release {
 
     private String url;

@@ -5,10 +5,13 @@
  */
 package nl.hyranasoftware.githubupdater.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 /**
  *
  * @author danny_000
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class GithubUser {
     
     private String login;
